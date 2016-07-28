@@ -41,7 +41,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 
 # # Other utilities
 # from sklearn.cross_validation import train_test_split
-# from sklearn.grid_search import GridSearchCV
+from sklearn.grid_search import GridSearchCV
 # from sklearn.feature_selection import RFE
 # from sklearn.calibration import CalibratedClassifierCV, calibration_curve
 
@@ -441,3 +441,20 @@ def plot_calibration_curve(est, name, fig_index):
     ax2.legend(loc='best', fancybox=True, framealpha=0.5)
 
     plt.tight_layout()
+
+def svc_param_select(X, y):
+    start = time()
+    Cs = [1, 10, 100]
+    gammas = [0.01, 0, 1, 0.07]
+    ks = ['sigmoid', 'linear', 'rbf']
+    coefs = [-100000000, -100, 0, 1, 100]
+    deg = [1,2,4]
+    param_grid = {'kernel': ks, 'C': Cs, 'gamma': gammas}
+    grid_search = GridSearchCV(SVC(), param_grid)
+    grid_search.fit(X, y)
+    grid_search.best_params_
+    end = time()
+    print "Best parameters: {}\n Best estimator: {}\n Best score: {}\n".format(grid_search.best_params_,
+                                                                               grid_search.best_estimator_,
+                                                                              grid_search.best_score_,)
+    print "Finished in {} seconds.".format(end-start)
